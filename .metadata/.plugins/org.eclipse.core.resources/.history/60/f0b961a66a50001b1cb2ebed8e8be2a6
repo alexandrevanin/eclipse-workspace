@@ -1,0 +1,323 @@
+import javax.swing.*;
+import java.util.List;
+
+public class Evento {
+	 public static void main(String[] args) {}
+	
+    private String nome;
+    private Responsavel responsavel;
+    private String data_inicio;
+    private String data_fim;
+    private int carga_horaria;
+    private List<Palestra> palestras;
+    
+   
+
+    public Evento(String nome) {
+        this.nome = nome;
+    }
+
+    public static double custosResponsavel(Evento evento){
+        double valor = evento.getResponsavel().getValor_por_hora();
+        int duracao = evento.getCarga_horaria();
+
+        return valor*duracao;
+    }
+
+    public static double custoPalestra(Palestra palestra){
+        float valor_palestrante = palestra.getPalestrante().getValor_hora();
+        double duracao = palestra.getCarga_horaria();
+
+        return valor_palestrante*duracao;
+    }
+
+    public static double valorTotalPalestras(Evento evento){
+        List<Palestra> palestra = evento.getPalestras();
+        int tamanho = palestra.size();
+        double total=0;
+
+        for(int i=0; i<tamanho; i++) {
+            total += custoPalestra(palestra.get(i));
+        }
+        return total;
+    }
+
+    public static void palestranteMaisCaro(Evento evento){
+        List<Palestra> palestra = evento.getPalestras();
+        double custo_atual;
+        double maior_custo=0;
+        String palestrante_mais_caro = null;
+
+        for(int i=0; i<palestra.size(); i++) {
+            custo_atual = custoPalestra(palestra.get(i));
+            if(custo_atual>maior_custo){
+                maior_custo=custo_atual;
+                palestrante_mais_caro = palestra.get(i).getPalestrante().getNome();
+            }
+        }
+        System.out.println("Palestrante mais caro: "+palestrante_mais_caro);
+    }
+
+    public static void palestranteMaisBarato(Evento evento){
+        List<Palestra> palestra = evento.getPalestras();
+        double custo_atual;
+        double menor_custo=1000;
+        String palestrante_mais_barato = null;
+
+        for(int i=0; i<palestra.size(); i++) {
+            custo_atual = custoPalestra(palestra.get(i));
+            if(custo_atual<menor_custo){
+                menor_custo=custo_atual;
+                palestrante_mais_barato = palestra.get(i).getPalestrante().getNome();
+            }
+        }
+        System.out.println("Palestrante mais barato: "+palestrante_mais_barato);
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Responsavel getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(Responsavel responsavel) {
+        this.responsavel = responsavel;
+    }
+
+    public String getData_inicio() {
+        return data_inicio;
+    }
+
+    public void setData_inicio(String data_inicio) {
+        this.data_inicio = data_inicio;
+    }
+
+    public String getData_fim() {
+        return data_fim;
+    }
+
+    public void setData_fim(String data_fim) {
+        this.data_fim = data_fim;
+    }
+
+    public int getCarga_horaria() {
+        return carga_horaria;
+    }
+
+    public void setCarga_horaria(int carga_horaria) {
+        this.carga_horaria = carga_horaria;
+    }
+
+    public List<Palestra> getPalestras() {
+        return palestras;
+    }
+
+    public void setPalestras(List<Palestra> palestras) {
+        this.palestras = palestras;
+    }
+}
+
+
+
+public class Palestra{
+    private String titulo;
+    private Palestrante palestrante;
+    private String inicio;
+    private String descricao;
+    private double carga_horaria;
+
+    public Palestra() {
+    }
+
+    public Palestra(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public Palestrante getPalestrante() {
+        return palestrante;
+    }
+
+    public void setPalestrante(Palestrante palestrante) {
+        this.palestrante = palestrante;
+    }
+
+    public String getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(String inicio) {
+        this.inicio = inicio;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public double getCarga_horaria() {
+        return carga_horaria;
+    }
+
+    public void setCarga_horaria(double carga_horaria) {
+        this.carga_horaria = carga_horaria;
+    }
+}
+
+
+
+public class Palestrante extends Palestra{
+    private String nome;
+    private String telefone;
+    private float valor_hora;
+
+    public Palestrante(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public float getValor_hora() {
+        return valor_hora;
+    }
+
+    public void setValor_hora(float valor_hora) {
+        this.valor_hora = valor_hora;
+    }
+}
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Principal{
+
+    public static void main(String[] args){
+
+        List<Palestra> palestras_evento1 = new ArrayList<>();
+
+        Evento evento1 = new Evento("aniversario museu");
+        Palestra palestra1 = new Palestra("Dinossauros");
+        Palestra palestra2 = new Palestra("Arqueologia");
+        Palestra palestra3 = new Palestra("Brasil Colonial");
+        Palestrante palestrante1 = new Palestrante("João da Silva");
+        Palestrante palestrante2 = new Palestrante("Ana Carolina de Sousa");
+        Responsavel responsavel = new Responsavel("José dos Santos");
+
+        palestrante1.setTelefone("9999-9999");
+        palestrante1.setValor_hora(125);
+
+        palestrante2.setTelefone("8888-8888");
+        palestrante2.setValor_hora(105);
+
+        palestra1.setDescricao("Período Jurássico e suas criaturas");
+        palestra1.setInicio("13h00min");
+        palestra1.setCarga_horaria(1.5);
+        palestra1.setPalestrante(palestrante1);
+        palestras_evento1.add(palestra1);
+
+        palestra2.setDescricao("Escavações no Egito e suas descobertas");
+        palestra2.setInicio("15h20min");
+        palestra2.setCarga_horaria(2);
+        palestra2.setPalestrante(palestrante1);
+        palestras_evento1.add(palestra2);
+
+        palestra3.setDescricao("Política do Brasil do séc XVII");
+        palestra3.setInicio("11h30min");
+        palestra3.setCarga_horaria(1.25);
+        palestra3.setPalestrante(palestrante2);
+        palestras_evento1.add(palestra3);
+
+        responsavel.setTelefone("7777-7777");
+        responsavel.setValor_por_hora(400);
+
+        evento1.setResponsavel(responsavel);
+        evento1.setCarga_horaria(8);
+        evento1.setPalestras(palestras_evento1);
+        evento1.setData_inicio("04/07/2020");
+        evento1.setData_fim("05/07/2020");
+
+        System.out.println("Custo por responsável: "+evento1.custosResponsavel(evento1));
+
+        for(int i=0;i<evento1.getPalestras().size(); i++) {
+            double custo;
+            custo = evento1.custoPalestra(evento1.getPalestras().get(i));
+            System.out.println("Custo palestra '"+evento1.getPalestras().get(i).getTitulo()+"': "+custo);
+        }
+
+        double custo_total = evento1.valorTotalPalestras(evento1);
+        System.out.println("valor total das palestras: "+custo_total);
+
+        evento1.palestranteMaisCaro(evento1);
+
+        evento1.palestranteMaisBarato(evento1);
+
+    }
+}
+
+
+import java.util.List;
+
+public class Responsavel{
+    private String nome;
+    private String telefone;
+    private double valor_por_hora;
+
+    public Responsavel(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public double getValor_por_hora() {
+        return valor_por_hora;
+    }
+
+    public void setValor_por_hora(double valor_por_hora) {
+        this.valor_por_hora = valor_por_hora;
+    }
+}
